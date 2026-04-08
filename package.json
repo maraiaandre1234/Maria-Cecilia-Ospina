@@ -1,8 +1,9 @@
 {
-  "name": "prueba-lectiva",
+  "name": "Maria-Cecilia-Ospina",
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "homepage": "https://maraiaandre1234.github.io/Maria-Cecilia-Ospina/",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
