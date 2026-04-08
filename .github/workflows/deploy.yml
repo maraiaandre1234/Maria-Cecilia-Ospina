@@ -12,13 +12,18 @@ on:
       - master
 
 permissions:
+  contents: read
   pages: write
   id-token: write
-  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: Build
 
     steps:
       - name: Checkout repository
@@ -31,22 +36,26 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Run linting
         run: npm run lint
 
       - name: Build static site
         run: npm run build
+        env:
+          NODE_ENV: production
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: build
+          retention-days: 1
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    name: Deploy
     
     environment:
       name: github-pages
@@ -58,3 +67,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
